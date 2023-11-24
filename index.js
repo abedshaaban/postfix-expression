@@ -16,26 +16,7 @@ function operate(num1, num2, operator) {
   }
 }
 
-function evaluatePostfix(numbers) {
-  const stack = [];
-  for (let i = 0; i < numbers.length; i++) {
-    if (!isNaN(numbers[i])) {
-      stack.push(numbers[i]);
-    } else {
-      const operator = numbers[i];
-      const num2 = parseInt(stack.pop());
-      const num1 = parseInt(stack.pop());
-      const result = operate(num1, num2, operator);
-      stack.push(result);
-    }
-  }
 
-  if (stack.length !== 1) {
-    throw new Error("This is not a valid expression");
-  }
-
-  return stack.pop();
-}
 
 function treeNode(char, childrenNode = []) {
   return { id: nanoid(4), value: char, children: childrenNode };
@@ -121,7 +102,6 @@ function treePostfix(expression) {
   });
   const expression = response.nums;
   const expression_array = expression.split(" ");
-  const stackResult = evaluatePostfix(expression_array);
   const treeResult = treePostfix(expression_array);
 
   console.log("stack value: ", stackResult);
