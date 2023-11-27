@@ -221,13 +221,4 @@ while (runningProgram) {
     default:
       throw new Error("invalid action chosen!???");
   }
-
-  //   const nodex = new Node(12);
-  //   const nodey = new Node(9);
-
-  // nodeElement.insertChild(new Node(6));
-  // nodeElement.insertChild(nodex);
-  // nodeElement.insertChildByID(nodex.getID(), nodey);
-  // console.log(nodeElement.getChildByID(nodex.getID()));
-  // console.log(nodeElement);
 }
