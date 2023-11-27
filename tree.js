@@ -1,4 +1,12 @@
 import prompts from "prompts";
+import { nanoid } from "nanoid";
+
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.id = nanoid(4);
+  }
+}
 
 async function getInput() {
   const response = await prompts({
@@ -17,4 +25,6 @@ while (true) {
     console.log("program closed.");
     break;
   }
+
+  const nodeElement = new Node(res);
 }
