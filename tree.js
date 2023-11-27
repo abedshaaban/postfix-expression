@@ -61,11 +61,21 @@ class Tree {
     if (this.root.id === id) {
       return this.children;
     } else {
-      for (let i = 0; i < this.children.length; i++) {
-        const childNode = this.children[i];
+      let queue = [...this.children];
 
-        if (childNode.id === id) {
-          return childNode.getChild();
+      while (queue.length > 0) {
+        const child = queue.shift();
+
+        const nodeChildren = child.getChild();
+
+        if (child.getID() === id) {
+          return child;
+        }
+
+        if (nodeChildren.length > 0) {
+          for (let i = 0; i < nodeChildren.length; i++) {
+            queue.push(nodeChildren[i]);
+          }
         }
       }
     }
