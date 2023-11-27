@@ -121,14 +121,15 @@ class Tree {
   deleteNodeById(id) {
     if (this.root.id === id) {
       if (this.children.length === 0) this.root = null;
-      else if (this.children.length >= 1)
+      else if (this.children.length > 1)
         console.log(
           "Cannot delete root node since it has multiple child nodes."
         );
       else {
         const childNode = this.children.shift();
-        this.root = childNode.deleteAllChildren();
-        this.children.push(childNode.getChild());
+        this.children.push(...childNode.getChild());
+        childNode.deleteAllChildren();
+        this.root = childNode;
       }
     } else {
       //  remove node
@@ -189,18 +190,20 @@ const daTree = new Tree();
 let runningProgram = true;
 
 while (runningProgram) {
+  console.log(daTree);
+
   const { action, id, value } = await getInput();
 
   console.clear();
 
   switch (action) {
     case dictActions.insertNode:
-      daTree.insertChild(value);
+      daTree.insertChild(new Node(value));
       console.log(`added ${value}`);
       break;
 
     case dictActions.insertNodeById:
-      daTree.insertChildByID(id, value);
+      daTree.insertChildByID(id, new Node(value));
       console.log(`added ${value} to parent ${id}`);
       break;
 
