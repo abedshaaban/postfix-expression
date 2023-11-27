@@ -45,6 +45,10 @@ class Node {
 
     this.children = newChildren;
   }
+
+  deleteAllChildren() {
+    this.children = [];
+  }
 }
 
 class Tree {
@@ -113,6 +117,23 @@ class Tree {
       }
     }
   }
+
+  deleteNodeById(id) {
+    if (this.root.id === id) {
+      if (this.children.length === 0) this.root = null;
+      else if (this.children.length >= 1)
+        console.log(
+          "Cannot delete root node since it has multiple child nodes."
+        );
+      else {
+        const childNode = this.children.shift();
+        this.root = childNode.deleteAllChildren();
+        this.children.push(childNode.getChild());
+      }
+    } else {
+      //  remove node
+    }
+  }
 }
 
 const dictActions = {
@@ -164,6 +185,7 @@ async function getInput() {
   return response;
 }
 
+const daTree = new Tree();
 let runningProgram = true;
 
 while (runningProgram) {
@@ -172,28 +194,33 @@ while (runningProgram) {
   console.clear();
 
   switch (action) {
+    case dictActions.insertNode:
+      daTree.insertChild(value);
+      console.log(`added ${value}`);
+      break;
+
+    case dictActions.insertNodeById:
+      daTree.insertChildByID(id, value);
+      console.log(`added ${value} to parent ${id}`);
+      break;
+
+    case dictActions.deleteNode:
+      if (!daTree.root?.id) {
+        console.log(`Tree is empty`);
+      } else {
+        daTree.deleteNodeById(id);
+        console.log(`deleted node of ${id}`);
+      }
+      break;
+
     case dictActions.exit:
       console.log("program closed.");
       runningProgram = false;
       break;
 
-    case dictActions.insertNode:
-      console.log(`added ${value}`);
-      break;
-
-    case dictActions.insertNodeById:
-      console.log(`added ${value} to parent ${id}`);
-      break;
-
-    case dictActions.deleteNode:
-      console.log(`deleted node of ${id}`);
-      break;
-
     default:
       throw new Error("invalid action chosen!???");
   }
-
-  //   const nodeElement = new Tree();
 
   //   const nodex = new Node(12);
   //   const nodey = new Node(9);
