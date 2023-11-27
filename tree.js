@@ -3,8 +3,49 @@ import { nanoid } from "nanoid";
 
 class Node {
   constructor(value) {
-    this.value = value;
     this.id = nanoid(4);
+    this.value = value;
+    this.children = [];
+  }
+
+  getID() {
+    return this.id;
+  }
+
+  getValue() {
+    return this.value;
+  }
+
+  getChildren() {
+    return this.children;
+  }
+
+  updateValue(newValue) {
+    this.value = newValue;
+  }
+
+  insertChild(node) {
+    this.children.push(node);
+  }
+
+  removeChild(childID) {
+    if (this.children.length === 0) {
+      return;
+    }
+
+    if (this.children.includes(childID)) {
+      let newChildren = [];
+
+      for (let i = 0; i < this.children.length; i++) {
+        const id = this.children[i];
+
+        if (id !== childID) {
+          newChildren.push(id);
+        }
+      }
+
+      this.children = newChildren;
+    }
   }
 }
 
