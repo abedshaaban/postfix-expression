@@ -116,31 +116,76 @@ class Tree {
 }
 
 async function getInput() {
-  const response = await prompts({
-    type: "text",
-    name: "value",
-    message: "Enter value to continue or 'exit' to close program:",
-  });
+  const dictActions = {
+    exit: "exit",
+    insertNode: "insertNode",
+    insertNodeById: "insertNodeById",
+    deleteNode: "deleteNode",
+  };
 
-  return response.value;
+  const response = await prompts([
+    {
+      type: "select",
+      name: "action",
+      message: "What do you want to do?",
+      choices: [
+        { title: "insert node", value: dictActions.insertNode },
+        { title: "insert node by id", value: dictActions.insertNodeById },
+        { title: "delete node", value: dictActions.deleteNode },
+        { title: "exit program", value: dictActions.exit },
+      ],
+    },
+    {
+      type: (prev) =>
+        prev === dictActions.insertNode || prev === dictActions.insertNodeById
+          ? "text"
+          : null,
+      name: "value",
+      message: "Enter value of node (numbers only):",
+    },
+    {
+      type: (_, value) =>
+        value.action === dictActions.insertNodeById ? "text" : null,
+      name: "id",
+      message: "Enter parent id to insert into:",
+    },
+    {
+      type: (_, value) =>
+        value.action === dictActions.deleteNode ? "text" : null,
+      name: "id",
+      message: "Enter node id to be deleted:",
+    },
+    {
+      type: (prev) => (prev === dictActions.exit ? null : ""),
+      name: "value",
+    },
+  ]);
+
+  return response;
 }
 
-// while (true) {
-// const res = await getInput();
+while (true) {
+  //   console.clear();
 
-// if (res === "exit") {
-//   console.log("program closed.");
-// break;
-// }
+  const answers = await getInput();
 
-const nodeElement = new Tree();
+  console.log(answers.action);
+  console.log(answers.value);
+  console.log(answers.id);
 
-const nodex = new Node(12);
-const nodey = new Node(9);
+  //   if (res === "exit") {
+  //     console.log("program closed.");
+  //     break;
+  //   }
 
-nodeElement.insertChild(new Node(6));
-nodeElement.insertChild(nodex);
-nodeElement.insertChildByID(nodex.getID(), nodey);
-console.log(nodeElement.getChildByID(nodex.getID()));
-console.log(nodeElement);
-// }
+  //   const nodeElement = new Tree();
+
+  //   const nodex = new Node(12);
+  //   const nodey = new Node(9);
+
+  // nodeElement.insertChild(new Node(6));
+  // nodeElement.insertChild(nodex);
+  // nodeElement.insertChildByID(nodex.getID(), nodey);
+  // console.log(nodeElement.getChildByID(nodex.getID()));
+  // console.log(nodeElement);
+}
