@@ -20,6 +20,25 @@ class Node {
     return this.children;
   }
 
+  getParentID() {
+    let queue = [...this.children];
+
+    while (queue.length > 0) {
+      const child = queue.shift();
+
+      const nodeChildren = child.getChild();
+
+      for (let i = 0; i < nodeChildren.length; i++) {
+        if (nodeChildren[i].getID() === id) {
+          queue = [];
+          return child.getID();
+        } else {
+          queue.push(nodeChildren[i]);
+        }
+      }
+    }
+  }
+
   updateValue(newValue) {
     this.value = newValue;
   }
@@ -76,10 +95,8 @@ class Tree {
           return child;
         }
 
-        if (nodeChildren.length > 0) {
-          for (let i = 0; i < nodeChildren.length; i++) {
-            queue.push(nodeChildren[i]);
-          }
+        for (let i = 0; i < nodeChildren.length; i++) {
+          queue.push(nodeChildren[i]);
         }
       }
     }
@@ -109,10 +126,8 @@ class Tree {
           break;
         }
 
-        if (nodeChildren.length > 0) {
-          for (let i = 0; i < nodeChildren.length; i++) {
-            queue.push(nodeChildren[i]);
-          }
+        for (let i = 0; i < nodeChildren.length; i++) {
+          queue.push(nodeChildren[i]);
         }
       }
     }
@@ -132,7 +147,33 @@ class Tree {
         this.root = childNode;
       }
     } else {
-      //  remove node
+      const upcomingTree = new Tree();
+      upcomingTree.root = this.root;
+
+      const queue = [...this.children];
+      const queueSecond = [];
+
+      while (queue.length > 0 || queueSecond > 0) {
+        const currentNode =
+          queue.length > 0 ? queue.shift() : queueSecond.shift();
+
+        if (currentNode.getID() !== id) {
+          if (queue.length >= 0) {
+            upcomingTree.insertChild(new Node(currentNode.getValue()));
+          } else if (queueSecond.length > 0) {
+            upcomingTree.insertChildByID(
+              currentNode.getParentID(),
+              new Node(currentNode.getValue())
+            );
+          }
+        }
+
+        for (let i = 0; i < currentNode.getChild().length; i++) {
+          queueSecond.push(currentNode.getChild()[i]);
+        }
+      }
+
+      this.children = [...upcomingTree.getChild()];
     }
   }
 }
