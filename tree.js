@@ -47,6 +47,21 @@ class Node {
   }
 }
 
+class Tree {
+  constructor(node) {
+    this.root = node === undefined ? null : node;
+    this.children = [];
+  }
+
+  insertChild(node) {
+    if (this.root === null) {
+      this.root = node;
+    } else {
+      this.children.push(node);
+    }
+  }
+}
+
 async function getInput() {
   const response = await prompts({
     type: "text",
@@ -57,13 +72,15 @@ async function getInput() {
   return response.value;
 }
 
-while (true) {
-  const res = await getInput();
+// while (true) {
+// const res = await getInput();
 
-  if (res === "exit") {
-    console.log("program closed.");
-    break;
-  }
+// if (res === "exit") {
+//   console.log("program closed.");
+// break;
+// }
 
-  const nodeElement = new Node(res);
-}
+const nodeElement = new Tree();
+// nodeElement.insertChild(new Node(6));
+console.log(nodeElement);
+// }
