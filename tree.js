@@ -115,14 +115,14 @@ class Tree {
   }
 }
 
-async function getInput() {
-  const dictActions = {
-    exit: "exit",
-    insertNode: "insertNode",
-    insertNodeById: "insertNodeById",
-    deleteNode: "deleteNode",
-  };
+const dictActions = {
+  exit: "exit",
+  insertNode: "insertNode",
+  insertNodeById: "insertNodeById",
+  deleteNode: "deleteNode",
+};
 
+async function getInput() {
   const response = await prompts([
     {
       type: "select",
@@ -164,19 +164,34 @@ async function getInput() {
   return response;
 }
 
-while (true) {
-  //   console.clear();
+let runningProgram = true;
 
-  const answers = await getInput();
+while (runningProgram) {
+  const { action, id, value } = await getInput();
 
-  console.log(answers.action);
-  console.log(answers.value);
-  console.log(answers.id);
+  console.clear();
 
-  //   if (res === "exit") {
-  //     console.log("program closed.");
-  //     break;
-  //   }
+  switch (action) {
+    case dictActions.exit:
+      console.log("program closed.");
+      runningProgram = false;
+      break;
+
+    case dictActions.insertNode:
+      console.log(`added ${value}`);
+      break;
+
+    case dictActions.insertNodeById:
+      console.log(`added ${value} to parent ${id}`);
+      break;
+
+    case dictActions.deleteNode:
+      console.log(`deleted node of ${id}`);
+      break;
+
+    default:
+      throw new Error("invalid action chosen!???");
+  }
 
   //   const nodeElement = new Tree();
 
