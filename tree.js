@@ -4,7 +4,7 @@ import { nanoid } from "nanoid";
 class Node {
   constructor(value) {
     this.id = nanoid(4);
-    this.value = value;
+    this.value = parseInt(value);
     this.children = [];
   }
 
@@ -33,19 +33,17 @@ class Node {
       return;
     }
 
-    if (this.children.includes(childID)) {
-      let newChildren = [];
+    let newChildren = [];
 
-      for (let i = 0; i < this.children.length; i++) {
-        const id = this.children[i];
+    for (let i = 0; i < this.children.length; i++) {
+      const childNode = this.children[i];
 
-        if (id !== childID) {
-          newChildren.push(id);
-        }
+      if (childNode.getID() !== childID) {
+        newChildren.push(childNode);
       }
-
-      this.children = newChildren;
     }
+
+    this.children = newChildren;
   }
 }
 
