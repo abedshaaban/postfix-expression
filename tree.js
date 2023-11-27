@@ -83,11 +83,22 @@ class Tree {
     if (this.root.id === id) {
       this.children.push(node);
     } else {
-      for (let i = 0; i < this.children.length; i++) {
-        const childNode = this.children[i];
+      let queue = [...this.children];
 
-        if (childNode.id === id) {
-          childNode.insertChild(node);
+      while (queue.length > 0) {
+        const child = queue.shift();
+
+        const nodeChildren = child.getChild();
+
+        if (child.getID() === id) {
+          child.insertChild(node);
+          break;
+        }
+
+        if (nodeChildren.length > 0) {
+          for (let i = 0; i < nodeChildren.length; i++) {
+            queue.push(nodeChildren[i]);
+          }
         }
       }
     }
@@ -115,11 +126,11 @@ async function getInput() {
 const nodeElement = new Tree();
 
 const nodex = new Node(12);
+const nodey = new Node(9);
 
 nodeElement.insertChild(new Node(6));
-nodeElement.insertChild(new Node(9));
 nodeElement.insertChild(nodex);
-nodeElement.insertChild(new Node(15));
-nodeElement.insertChildByID(nodex.getID(), new Node(21));
+nodeElement.insertChildByID(nodex.getID(), nodey);
 console.log(nodeElement.getChildByID(nodex.getID()));
+console.log(nodeElement);
 // }
