@@ -182,6 +182,7 @@ const dictActions = {
   exit: "exit",
   insertNode: "insertNode",
   insertNodeById: "insertNodeById",
+  getNode: "getNode",
   deleteNode: "deleteNode",
 };
 
@@ -194,6 +195,7 @@ async function getInput() {
       choices: [
         { title: "insert node", value: dictActions.insertNode },
         { title: "insert node by id", value: dictActions.insertNodeById },
+        { title: "get node", value: dictActions.getNode },
         { title: "delete node", value: dictActions.deleteNode },
         { title: "exit program", value: dictActions.exit },
       ],
@@ -217,6 +219,12 @@ async function getInput() {
         value.action === dictActions.deleteNode ? "text" : null,
       name: "id",
       message: "Enter node id to be deleted:",
+    },
+    {
+      type: (_, value) =>
+        value.action === dictActions.getNode ? "text" : null,
+      name: "id",
+      message: "Enter node id to get:",
     },
     {
       type: (prev) => (prev === dictActions.exit ? null : ""),
@@ -248,6 +256,11 @@ while (runningProgram) {
       console.log(`added ${value} to parent ${id}`);
       break;
 
+    case dictActions.getNode:
+      console.log(`get node of id: ${id}`);
+      console.log(daTree.getChildByID(id));
+      break;
+
     case dictActions.deleteNode:
       if (!daTree.root?.id) {
         console.log(`Tree is empty`);
@@ -265,4 +278,5 @@ while (runningProgram) {
     default:
       throw new Error("invalid action chosen!???");
   }
+  console.log("------------------------------");
 }
