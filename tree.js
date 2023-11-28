@@ -1,5 +1,6 @@
 import prompts from "prompts";
 import { nanoid } from "nanoid";
+import { red, reset, cyan, green, lightYellow, magenta } from "kolorist";
 
 class Node {
   constructor(value) {
@@ -193,11 +194,14 @@ async function getInput() {
       name: "action",
       message: "What do you want to do?",
       choices: [
-        { title: "insert node", value: dictActions.insertNode },
-        { title: "insert node by id", value: dictActions.insertNodeById },
-        { title: "get node", value: dictActions.getNode },
-        { title: "delete node", value: dictActions.deleteNode },
-        { title: "exit program", value: dictActions.exit },
+        { title: reset("insert node"), value: dictActions.insertNode },
+        {
+          title: reset("insert node by id"),
+          value: dictActions.insertNodeById,
+        },
+        { title: reset("get node"), value: dictActions.getNode },
+        { title: reset("delete node"), value: dictActions.deleteNode },
+        { title: reset("exit program"), value: dictActions.exit },
       ],
     },
     {
@@ -206,25 +210,25 @@ async function getInput() {
           ? "text"
           : null,
       name: "value",
-      message: "Enter value of node (numbers only):",
+      message: green("Enter value of node (numbers only):"),
     },
     {
       type: (_, value) =>
         value.action === dictActions.insertNodeById ? "text" : null,
       name: "id",
-      message: "Enter parent id to insert into:",
+      message: cyan("Enter parent id:"),
     },
     {
       type: (_, value) =>
         value.action === dictActions.deleteNode ? "text" : null,
       name: "id",
-      message: "Enter node id to be deleted:",
+      message: red("Enter node id to be deleted:"),
     },
     {
       type: (_, value) =>
         value.action === dictActions.getNode ? "text" : null,
       name: "id",
-      message: "Enter node id to get:",
+      message: cyan("Enter node id to get:"),
     },
     {
       type: (prev) => (prev === dictActions.exit ? null : ""),
@@ -248,16 +252,16 @@ while (runningProgram) {
   switch (action) {
     case dictActions.insertNode:
       daTree.insertChild(new Node(value));
-      console.log(`added ${value}`);
+      console.log(`added ${cyan(value)}`);
       break;
 
     case dictActions.insertNodeById:
       daTree.insertChildByID(id, new Node(value));
-      console.log(`added ${value} to parent ${id}`);
+      console.log(`added ${green(value)} to parent ${cyan(id)}`);
       break;
 
     case dictActions.getNode:
-      console.log(`get node of id: ${id}`);
+      console.log(`get node of id: ${cyan(id)}`);
       console.log(daTree.getChildByID(id));
       break;
 
@@ -266,17 +270,18 @@ while (runningProgram) {
         console.log(`Tree is empty`);
       } else {
         daTree.deleteNodeById(id);
-        console.log(`deleted node of ${id}`);
+        console.log(`deleted node of ${cyan(id)}`);
       }
       break;
 
     case dictActions.exit:
-      console.log("program closed.");
+      console.log(lightYellow("program closed."));
       runningProgram = false;
       break;
 
     default:
       throw new Error("invalid action chosen!???");
   }
-  console.log("------------------------------");
+
+  console.log(magenta("------------------------------"));
 }
