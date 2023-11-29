@@ -1,110 +1,110 @@
 import prompts from "prompts";
-import { nanoid } from "nanoid";
+import { red, reset, cyan, green, lightYellow, magenta } from "kolorist";
+import { Node, Tree } from "./classes/index.js";
 
-function operate(num1, num2, operator) {
-  switch (operator) {
-    case "+":
-      return num1 + num2;
-    case "-":
-      return num1 - num2;
-    case "/":
-      return num1 / num2;
-    case "*":
-      return num1 * num2;
-    default:
-      throw new Error("Invalid operator:" + operator);
-  }
+const dictActions = {
+  exit: "exit",
+  insertNode: "insertNode",
+  insertNodeById: "insertNodeById",
+  getNode: "getNode",
+  deleteNode: "deleteNode",
+};
+
+async function getInput() {
+  const response = await prompts([
+    {
+      type: "select",
+      name: "action",
+      message: "What do you want to do?",
+      choices: [
+        { title: reset("insert node"), value: dictActions.insertNode },
+        {
+          title: reset("insert node by id"),
+          value: dictActions.insertNodeById,
+        },
+        { title: reset("get node"), value: dictActions.getNode },
+        { title: reset("delete node"), value: dictActions.deleteNode },
+        { title: reset("exit program"), value: dictActions.exit },
+      ],
+    },
+    {
+      type: (prev) =>
+        prev === dictActions.insertNode || prev === dictActions.insertNodeById
+          ? "text"
+          : null,
+      name: "value",
+      message: green("Enter value of node (numbers only):"),
+    },
+    {
+      type: (_, value) =>
+        value.action === dictActions.insertNodeById ? "text" : null,
+      name: "id",
+      message: cyan("Enter parent id:"),
+    },
+    {
+      type: (_, value) =>
+        value.action === dictActions.deleteNode ? "text" : null,
+      name: "id",
+      message: red("Enter node id to be deleted:"),
+    },
+    {
+      type: (_, value) =>
+        value.action === dictActions.getNode ? "text" : null,
+      name: "id",
+      message: cyan("Enter node id to get:"),
+    },
+    {
+      type: (prev) => (prev === dictActions.exit ? null : ""),
+      name: "value",
+    },
+  ]);
+
+  return response;
 }
 
+const daTree = new Tree();
+let runningProgram = true;
 
+while (runningProgram) {
+  console.log(daTree);
 
-function treeNode(char, childrenNode = []) {
-  return { id: nanoid(4), value: char, children: childrenNode };
-}
+  const { action, id, value } = await getInput();
 
-function getchildren(id, tr) {
-  let val;
-  for (let i = 0; i < tr.length; i++) {
-    if (id === tr[i].id) {
-      val = tr[i];
-    }
-  }
+  console.clear();
 
-  return val;
-}
+  switch (action) {
+    case dictActions.insertNode:
+      daTree.insertChild(new Node(value));
+      console.log(`added ${cyan(value)}`);
+      break;
 
-function getNodesValue(node, tr) {
-  const children = node.children;
+    case dictActions.insertNodeById:
+      daTree.insertChildByID(id, new Node(value));
+      console.log(`added ${green(value)} to parent ${cyan(id)}`);
+      break;
 
-  const child1 = getchildren(children[0], tr);
-  const child2 = getchildren(children[1], tr);
+    case dictActions.getNode:
+      console.log(`get node of id: ${cyan(id)}`);
+      console.log(daTree.getChildByID(id));
+      break;
 
-  return operate(
-    child2.children.length === 0 ? child2.value : getNodesValue(child2, tr),
-    child1.children.length === 0 ? child1.value : getNodesValue(child1, tr),
-    node.value
-  );
-}
-
-function getTreeValue(tr) {
-  let value = null;
-
-  const parentNode = tr[tr.length - 1];
-
-  if (!isNaN(parentNode.value)) {
-    throw new Error("This is not a valid expression");
-  } else {
-    if (parentNode.children.length === 0) {
-      value = parentNode.value;
-    } else {
-      value = getNodesValue(parentNode, tr);
-    }
-  }
-
-  return value;
-}
-
-function treePostfix(expression) {
-  let tree = [];
-
-  if (expression.length === 1 && expression[0] === "") {
-    throw new Error("Expression is empty");
-  }
-
-  for (let i = 0; i < expression.length; i++) {
-    const char = expression[i];
-
-    if (isNaN(char)) {
-      const prevNode = tree[i - 1];
-      const prevPrevNode = tree[i - 2];
-
-      if (!isNaN(prevNode)) {
-        const node = treeNode(parseInt(char));
-        tree.push(node);
+    case dictActions.deleteNode:
+      if (!daTree.root?.id) {
+        console.log(`Tree is empty`);
       } else {
-        const node = treeNode(char, [prevNode.id, prevPrevNode.id]);
-        tree.push(node);
+        daTree.deleteNodeById(id);
+        console.log(`deleted node of ${cyan(id)}`);
       }
-    } else {
-      tree.push(treeNode(parseInt(char)));
-    }
+      break;
+
+    case dictActions.exit:
+      console.log(lightYellow("program closed."));
+      runningProgram = false;
+      break;
+
+    default:
+      throw new Error("invalid action chosen!???");
   }
 
-  console.log(tree);
-  return getTreeValue(tree);
+  console.log(magenta("------------------------------"));
 }
-
-(async () => {
-  const response = await prompts({
-    type: "text",
-    name: "nums",
-    message: "Enter math numbers & operators:",
-  });
-  const expression = response.nums;
-  const expression_array = expression.split(" ");
-  const treeResult = treePostfix(expression_array);
-
-  console.log("stack value: ", stackResult);
-
-  console.log("tree value:", treeResult);
-})();

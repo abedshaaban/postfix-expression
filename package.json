@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "jest"
+    "test": ""
   },
   "author": "",
   "license": "ISC",
@@ -13,8 +13,5 @@
     "kolorist": "^1.8.0",
     "nanoid": "^5.0.3",
     "prompts": "^2.4.2"
-  },
-  "devDependencies": {
-    "jest": "^29.7.0"
   }
 }
