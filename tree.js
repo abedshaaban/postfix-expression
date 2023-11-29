@@ -2,7 +2,7 @@ import prompts from "prompts";
 import { nanoid } from "nanoid";
 import { red, reset, cyan, green, lightYellow, magenta } from "kolorist";
 
-class Node {
+export class Node {
   constructor(value) {
     this.id = nanoid(4);
     this.value = parseInt(value);
@@ -71,7 +71,7 @@ class Node {
   }
 }
 
-class Tree {
+export class Tree {
   constructor(node) {
     this.root = node === undefined ? null : node;
     this.children = [];
