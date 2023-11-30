@@ -11,6 +11,14 @@ export default class Tree {
 
   /**
    *
+   * @returns tree root
+   */
+  getRoot() {
+    return this.root;
+  }
+
+  /**
+   *
    * @returns list of `Node` children
    */
   getChild() {
