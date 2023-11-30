@@ -1,5 +1,5 @@
 import test from "ava";
-import { Node } from "./classes/index.js";
+import { Tree, Node } from "./classes/index.js";
 
 test("Node: create node", (t) => {
   const node = new Node(42);
@@ -52,4 +52,11 @@ test("Node: remove all children from a node", (t) => {
   node.deleteAllChildren();
 
   t.deepEqual(node.getChild(), []);
+});
+
+test("Tree: create tree", (t) => {
+  const tree = new Tree();
+
+  t.is(tree.getRoot(), null);
+  t.deepEqual(tree.getChild(), []);
 });
