@@ -1,15 +1,26 @@
 import Node from "./node-class.js";
 
+/**
+ * `Tree` creates a tree object
+ */
 export default class Tree {
   constructor(node) {
     this.root = node === undefined ? null : node;
     this.children = [];
   }
 
+  /**
+   *
+   * @returns list of `Node` children
+   */
   getChild() {
     return this.children;
   }
 
+  /**
+   *
+   * @returns `Node` with a specific id
+   */
   getChildByID(id) {
     if (this.root.id === id) {
       return this.children;
@@ -32,6 +43,11 @@ export default class Tree {
     }
   }
 
+  /**
+   * inserts a new `Node` to the children
+   *
+   * @param Node
+   */
   insertChild(node) {
     if (this.root === null) {
       this.root = node;
@@ -40,6 +56,11 @@ export default class Tree {
     }
   }
 
+  /**
+   * inserts a new `Node` to a specific parent `Node`
+   *
+   * @param Node
+   */
   insertChildByID(id, node) {
     if (this.root.id === id) {
       this.children.push(node);
@@ -63,6 +84,11 @@ export default class Tree {
     }
   }
 
+  /**
+   * deletes a `Node` with id
+   *
+   * @param id Node's id
+   */
   deleteNodeById(id) {
     if (this.root.id === id) {
       if (this.children.length === 0) this.root = null;
