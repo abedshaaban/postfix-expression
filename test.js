@@ -1,7 +1,7 @@
 import test from "ava";
 import { Node } from "./classes/index.js";
 
-test("Node create", (t) => {
+test("Node: create node", (t) => {
   const node = new Node(42);
 
   t.is(typeof node.getID(), "string");
@@ -9,14 +9,14 @@ test("Node create", (t) => {
   t.deepEqual(node.getChild(), []);
 });
 
-test("Node update value", (t) => {
+test("Node: update node value", (t) => {
   const node = new Node(12);
 
   node.updateValue(24);
   t.deepEqual(node.getValue(), 24);
 });
 
-test("Node insert child", (t) => {
+test("Node: insert a new child to a node", (t) => {
   const node = new Node(45);
   const nodeChild = new Node(66);
 
@@ -24,7 +24,7 @@ test("Node insert child", (t) => {
   t.true(node.getChild().includes(nodeChild));
 });
 
-test("Node remove child by id", (t) => {
+test("Node: remove child by id from a node", (t) => {
   const node = new Node(99);
   const childToRemove = new Node(0);
 
@@ -40,7 +40,7 @@ test("Node remove child by id", (t) => {
   t.is(node.getChild().length, 1);
 });
 
-test("Node remove all children", (t) => {
+test("Node: remove all children from a node", (t) => {
   const node = new Node(3);
 
   node.insertChild(new Node(6));
