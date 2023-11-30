@@ -60,3 +60,48 @@ test("Tree: create tree", (t) => {
   t.is(tree.getRoot(), null);
   t.deepEqual(tree.getChild(), []);
 });
+
+test("Tree: add root node", (t) => {
+  const tree = new Tree();
+
+  t.is(tree.getRoot(), null);
+
+  tree.insertChild(new Node(12));
+
+  t.not(tree.getRoot(), null);
+});
+
+test("Tree: get root value", (t) => {
+  const tree = new Tree();
+
+  tree.insertChild(new Node(33));
+
+  t.is(tree.getRoot().getValue(), 33);
+});
+
+test("Tree: update root value", (t) => {
+  const tree = new Tree();
+
+  tree.insertChild(new Node(77));
+  tree.getRoot().updateValue(1);
+
+  t.is(tree.getRoot().getValue(), 1);
+});
+
+test("Tree: insert child to root", (t) => {
+  const tree = new Tree();
+
+  t.deepEqual(tree.getChild(), []);
+
+  tree.insertChild(new Node(8));
+  tree.insertChild(new Node(9));
+
+  t.is(tree.getChild().length, 1);
+  t.is(tree.getChild()[0].getValue(), 9);
+});
+
+test("Tree: insert node by id", () => {});
+
+test("Tree: get node by id", () => {});
+
+test("Tree: delete node by id", () => {});
